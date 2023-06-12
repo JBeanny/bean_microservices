@@ -19,6 +19,7 @@
 		<module>fraud</module>
 		<module>eureka_server</module>
         <module>api-gateway</module>
+        <module>order</module>
     </modules>
 	<properties>
 		<java.version>17</java.version>
