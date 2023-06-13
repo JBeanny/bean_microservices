@@ -22,6 +22,16 @@ public class ProductController {
         return productService.getProducts();
     }
 
+    @GetMapping("/{product_id}")
+    public Product getProductById(@PathVariable Long product_id) throws Exception {
+        return productService.getProductById(product_id);
+    }
+
+    @PatchMapping("/{product_id}")
+    public void updateProductAmount(@PathVariable Long product_id) {
+        productService.updateProductAmount(product_id);
+    }
+
     @PostMapping()
     public ResponseEntity<Object> createProduct(@RequestBody Product product) {
         Map<String,Object> response = new HashMap<>();
