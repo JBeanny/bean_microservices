@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,8 @@ public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private KafkaTemplate<String,String> kafkaTemplate;
 
     public List<OrderModel> getOrders(){
         return orderRepository.findAll();
@@ -33,10 +36,8 @@ public class OrderService {
 
         if(product.getProductAmount() >= 1) {
             log.info("Product quantity sufficient ...");
+            // in this operation we use kafka consume
             log.info("Grabbing product ...");
-            // decrease product amount by 1
-            new Helper().callApiToPatch(urlToRequest);
-            log.info("Product is grabbed ...");
 
             OrderModel orderToSave = OrderModel.builder()
                     .customerId(order.getCustomerId())
@@ -44,7 +45,8 @@ public class OrderService {
                     .orderDate(LocalDateTime.now())
                     .build();
             log.info("Saving order ...");
-            orderRepository.save(orderToSave);
+            OrderModel savedOrder = orderRepository.save(orderToSave);
+            kafkaTemplate.send("order-topic",savedOrder.toString());
         }else{
             log.info("Not enough amount ...");
             throw new Exception("Product amount insufficient");

@@ -4,18 +4,20 @@ server:
 spring:
   application:
     name: order
+  kafka:
+    bootstrap-servers: http://localhost:9092
   datasource:
     url: jdbc:postgresql://localhost:5432/order
     username: 'jbeanny'
     password: 'password'
-  jpa:
-    show-sql: 'true'
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: 'true'
+#  jpa:
+#    show-sql: 'true'
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        format_sql: 'true'
 
   eureka:
     client:
