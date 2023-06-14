@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: product
+  kafka:
+    bootstrap-servers: http://localhost:9092
   datasource:
     url: jdbc:postgresql://localhost:5432/product
     username: 'jbeanny'
